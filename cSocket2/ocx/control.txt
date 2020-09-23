@@ -1,0 +1,37 @@
+WINSOCK CONTROL		CSOCKET2 CONTROL
+-------------------------------------------------------------------
+EVENTS
+-------------------------------------------------------------------
+Close			CloseSck()
+Connect			Connect()
+ConnectionRequest	ConnectionRequest(ByVal requestID As Long)
+DataArrival		DataArrival(ByVal bytesTotal As Long)
+Error			Error(ByVal Number As Integer, Description As String, ByVal sCode As Long, ByVal Source As String, ByVal HelpFile As String, ByVal HelpContext As Long, CancelDisplay As Boolean)
+SendComplete		SendComplete()
+SendProgress		SendProgress(ByVal bytesSent As Long, ByVal bytesRemaining As Long)
+-------------------------------------------------------------------
+PROPERTIES
+-------------------------------------------------------------------
+BytesReceived		BytesReceived() As Long
+LocalHostName		LocalHostName() As String
+LocalIP			LocalIP() As String
+LocalPort		LocalPort() As Long
+Protocol		Protocol() As ProtocolConstants
+RemoteHostIP		RemoteHostIP() As String
+RemotePort		RemoteHost() As String
+			GetIPFromHost(HostName As String, Optional UseIPv6 As Long) As String
+RemotePort		RemotePort() As Long
+SocketHandle		SocketHandle() As Long
+State			State() As SockState
+			Tag() As String
+			IPv6Flg(ByVal IPvFlg As Long)
+-------------------------------------------------------------------
+METHODS
+-------------------------------------------------------------------
+Accept			Accept(requestID As Long)
+Bind			Bind(Optional LocalPort As Variant, Optional LocalIP As Variant)
+Close			CloseSck()
+GetData			Connect(Optional RemoteHost As Variant, Optional RemotePort As Variant)
+Listen			Listen()
+PeekData		PeekData(ByRef data As Variant, Optional varType As Variant, Optional maxLen As Variant)
+SendData		SendData(data As Variant)

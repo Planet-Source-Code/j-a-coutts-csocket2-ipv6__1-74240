@@ -1,0 +1,124 @@
+Windows Vista and Windows 7 both come equipped with dual stack IPv4/IPv6, and it can be enabled on 
+Windows XP/SP2. On a default installation of Vista/Win7, IPv6 should already be operational. In 
+order to fully test your IPv6 readiness, you will also need the services of a Tunnel Broker. A 
+Tunnel Broker is a server that sits on both an IPv6 network and an IPv4 network. IPv6 packets are 
+encapsulated inside an IPv4 packet and sent out over the IPv4 network. The server strips the IPv4 
+info and sends the packet on to the IPv6 server. Return packets follow the reverse route. 
+Vista/Win7 come equipped with the Teredo Tunnel, but it is not functional by default. To get all 
+these working, the following services must be running:
+IP Helper – Automatic Started
+Windows Firewall – Automatic Started
+Base Filtering Engine – Manual Started
+Don’t ask me why the Firewall has to run, but Microsoft says that the Teredo Tunnel is a security 
+risk. To the best of my knowledge, the Teredo Tunnel is the only one that will work behind a NAT 
+router that does not support IPv6. It uses a technique similar to PPP networks, with a specific 
+UDP port being used to maintain contact.
+
+One of the major differences with IPv6 is that there can be multiple IP addresses. Since there is 
+no longer a Netmask to determine if an address is on the local network, or if it has to be routed 
+through a gateway, they have introduced something call a link-local address. If you go to the 
+command prompt and enter the “ipconfig /all” command, you should see an address beginning with 
+“fe80::” and ending with “%x” under the Local Area Connection. The “%x” is a random ID number 
+assigned to the interface, and will be necessary to use at times (more on that later). If the 
+system only has a link-local and  a Teredo tunnel IP address, the DNS will not return an IPv6 
+address. To overcome this limitation, we have to fool the system by adding another IPv6 address. 
+If you are fortunate enough to have a router that supports IPv6 DHCP, one will already have been 
+assigned to you. If not, you must manually enter it. Go to the Properties of your LAN or WiFi 
+interface, and change it to have a static IPv6 address. The easiest solution is to use the 
+converted IPv4 address with a netmask of 48. For example, a static IPv4 address of  “192.168.1.2” 
+converts to “2002:c0a8:102::” (192 = c0h, 168 = a8h, 1 = 01h, 2 = 02h). Don’t configure a default 
+gateway for this address, because there isn’t one.
+
+Windows will now resolve IPv6 domain names. The simplest way to test this is to ping your own 
+computer name (find under System in the Control Panel), or another computer name on your local 
+network that supports IPv6. It should resolve the link-local address and complete the ping. For 
+example:
+C:\>ping donna2-pc
+Pinging Donna2-PC [fe80::8d22:1710:b68c:37d9%9] from fe80::a5bb:d4f:e017:e25c%9 with 32 bytes of 
+data:
+Reply from fe80::8d22:1710:b68c:37d9%9: time<1ms
+Reply from fe80::8d22:1710:b68c:37d9%9: time<1ms
+Reply from fe80::8d22:1710:b68c:37d9%9: time<1ms
+Reply from fe80::8d22:1710:b68c:37d9%9: time<1ms
+Ping statistics for fe80::8d22:1710:b68c:37d9%9:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 0ms, Maximum = 0ms, Average = 0ms
+On one machine I had difficulty getting the ping command to use the correct interface. It wanted 
+to use the Teredo link-local address instead of the ethernet adapter link-local address. I solved 
+the problem by disabling the other Microsoft interface via the registry.
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip6\Parameters\DisabledComponents
+This key probably won’t exist and must be added as a REG_DWORD. The value is a bit map:
+·	Bit 0 Set to 1 to disable all IPv6 tunnel interfaces, including ISATAP, 6to4, and Teredo tunnels. Default value is 0 
+·	Bit 1 Set to 1 to disable all 6to4-based interfaces. Default value is 0 
+·	Bit 2 Set to 1 to disable all ISATAP-based interfaces. Default value is 0 
+·	Bit 3 Set to 1 to disable all Teredo-based interfaces. Default value is 0 
+·	Bit 4 Set to 1 to disable IPv6 over all non-tunnel interfaces, including LAN interfaces 
+and *Point-to-Point Protocol (PPP)-based interfaces. Default value is 0 
+·	Bit 5 Set to 1 to modify the default prefix policy table to prefer IPv4 to IPv6 when 
+attempting connections. Default value is 0 
+To disable the ISATAP interface, I changed the value to 4 (bit 2).
+
+At this point, we need to expose you to a command that has always been there, but wasn’t really 
+used much with IPv4.
+C:\>netsh int ipv6 show teredo
+Teredo Parameters
+---------------------------------------------
+Type                    : client
+Server Name             : teredo.ipv6.microsoft.com.
+Client Refresh Interval : 30 seconds
+Client Port             : unspecified
+State                   : dormant
+Client Type             : teredo host-specific relay
+Network                 : managed
+NAT                     : none (global connectivity)
+
+“Int” is short for “interface”. If the state shows as “offline”, you may have to force Teredo 
+into accepting your NAT router. This is done using the following command:
+C:\>netsh int ipv6 set teredo type=enterpriseclient
+Ok.
+If Teredo is now functional, then you should be able to find the interface index using the 
+“ipconfig /all” command:
+Tunnel adapter Local Area Connection* 6:
+   Connection-specific DNS Suffix  . :
+   Description . . . . . . . . . . . : Teredo Tunneling Pseudo-Interface
+   Physical Address. . . . . . . . . : 02-00-54-55-4E-01
+   DHCP Enabled. . . . . . . . . . . : No
+   Autoconfiguration Enabled . . . . : Yes
+   IPv6 Address. . . . . . . . . . . : 2001:0:4137:9e76:142b:a209:30f9:a279(Preferred)
+   Link-local IPv6 Address . . . . . : fe80::142b:a209:30f9:a279%8(Preferred)
+   Default Gateway . . . . . . . . . : ::
+   NetBIOS over Tcpip. . . . . . . . : Disabled
+In the example above, the interface index is %8 for the Teredo interface. We need this number for 
+the next command, since there is no default route to allow traffic to flow to the Internet.
+C:\>netsh int ipv6 add route ::/0 interface=8
+Ok.
+With this last step you should now be able to access IPv6 sites such as:
+C:\>ping ipv6.google.com
+Pinging ipv6.l.google.com [2001:4860:b006::69] from 2001:0:4137:9e76:249b:92d7:b464:60e9 with 32 
+bytes of data:
+Reply from 2001:4860:b006::69: time=31ms
+Reply from 2001:4860:b006::69: time=31ms
+Reply from 2001:4860:b006::69: time=31ms
+Reply from 2001:4860:b006::69: time=31ms
+Ping statistics for 2001:4860:b006::69:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 31ms, Maximum = 31ms, Average = 31ms
+It may take more than one attempt to activate the interface. Then try entering 
+http://ipv6.google.com into your browser, and it should bring up Google’s IPv6 page.
+
+Be aware that at this point in time, Windows will always prefer IPv4 over IPv6 if both exist for 
+a given domain. We can change that behaviour by modifying the prefixpolicies table:
+C:\>netsh int ipv6 show pre
+Querying active state...
+Precedence  Label  Prefix
+----------  -----  --------------------------------
+        50      0  ::1/128
+        40      1  ::/0
+        30      2  2002::/16
+        20      3  ::/96
+        10      4  ::ffff:0:0/96
+	5	5  2001::/32
+But I will leave that for you to investigate on your own.
+
