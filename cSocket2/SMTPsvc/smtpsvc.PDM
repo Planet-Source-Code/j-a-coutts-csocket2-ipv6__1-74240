@@ -1,0 +1,112 @@
+[Root]
+Most Recent Package=Standard Setup Package 1
+
+
+[Package|Standard Setup Package 1|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\VB98\utility\smtpserver\CSocket\smtpsvc\Package
+
+[Package|Standard Setup Package 1|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Standard Setup Package 1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Standard Setup Package 1|Files Found]
+
+[Package|Standard Setup Package 1|Files Released]
+
+[Package|Standard Setup Package 1|Missing Dependency Information]
+C:\Windows\System32\CSocket.ocx=
+C:\Windows\System32\DartService.dll=
+C:\Windows\System32\psapi.dll=
+C:\VB98\utility\smtpserver\CSocket\SMTPServer6.exe=
+
+[Package|Standard Setup Package 1|Out-of-Date Dependency Information]
+
+[Package|Standard Setup Package 1|Files Added]
+C:\VB98\utility\smtpserver\CSocket\SMTPServer6.exe=
+C:\VB98\utility\smtpserver\CSocket\smtpsvc\logs\120106.log=
+
+[Package|Standard Setup Package 1|Files Removed]
+c:\windows\system32\psapi.dll=
+
+[Package|Standard Setup Package 1|Files In Project]
+C:\VB98\utility\smtpserver\CSocket\smtpsvc\SMTPsvc6.exe=Yes
+C:\Windows\System32\msvbvm60.dll=Yes
+C:\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=Yes
+C:\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=Yes
+C:\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=Yes
+C:\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=Yes
+C:\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\Windows\System32\psapi.dll=No
+C:\Windows\System32\mscomctl.ocx=Yes
+C:\Windows\System32\DartService.dll=Yes
+C:\Windows\System32\CSocket.ocx=Yes
+C:\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\Windows\System32\VB6STKIT.DLL=Yes
+C:\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\VB98\utility\smtpserver\CSocket\SMTPServer6.exe=Yes
+C:\VB98\utility\smtpserver\CSocket\smtpsvc\logs\120106.log=Yes
+
+[Package|Standard Setup Package 1|Configure Registry Files]
+Applicable=No
+
+[Package|Standard Setup Package 1|Configure Remote Servers]
+Applicable=No
+
+[Package|Standard Setup Package 1|Install Locations]
+C:\VB98\utility\smtpserver\CSocket\smtpsvc\SMTPsvc6.exe=$(AppPath)
+C:\Windows\System32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\Windows\System32\mscomctl.ocx=$(WinSysPath)
+C:\Windows\System32\DartService.dll=$(WinSysPath)
+C:\Windows\System32\CSocket.ocx=$(WinSysPath)
+C:\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\Windows\System32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\VB98\utility\smtpserver\CSocket\SMTPServer6.exe=$(AppPath)
+C:\VB98\utility\smtpserver\CSocket\smtpsvc\logs\120106.log=$(AppPath)\logs
+
+[Package|Standard Setup Package 1|Configure Shared Files]
+Applicable=Yes
+C:\VB98\utility\smtpserver\CSocket\smtpsvc\SMTPsvc6.exe=No
+C:\VB98\utility\smtpserver\CSocket\SMTPServer6.exe=No
+C:\VB98\utility\smtpserver\CSocket\smtpsvc\logs\120106.log=No
+
+[Package|Standard Setup Package 1|Distribution]
+Type=single
+Size=
+Title=SMTPSvc6
+
+[Package|Standard Setup Package 1|IconGroups]
+Group0=SMTPSvc
+PrivateGroup0=-1
+Parent0=$(Programs)
+
+[Package|Standard Setup Package 1|SMTPSvc]
+Icon1=SMTPsvc6.exe
+Title1=SMTPSvc6
+StartIn1=$(AppPath)
+Key1=Icon1
+Icon2=SMTPServer6.exe
+Title2=Icon3
+StartIn2=$(AppPath)
+Key2=Icon3
+
+[Package|Standard Setup Package 1|Package]
+PackageFolder=C:\VB98\utility\smtpserver\CSocket\smtpsvc\Package
+ProjectFolder=C:\VB98\utility\smtpserver\CSocket\smtpsvc
+ServerSideCab=
+File1=C:\VB98\utility\smtpserver\CSocket\smtpsvc\Package\setup.exe
+File2=C:\VB98\utility\smtpserver\CSocket\smtpsvc\Package\Setup.Lst
+File3=C:\VB98\utility\smtpserver\CSocket\smtpsvc\Package\SMTPsvc6.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
